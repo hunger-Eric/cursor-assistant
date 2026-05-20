@@ -1,0 +1,24 @@
+﻿# Cursor Assistant Configuration
+app:
+  name: "Cursor Assistant"
+  version: "1.0.0"
+  debug: false
+
+proxy:
+  host: "0.0.0.0"
+  port: 8080
+  cert_dir: "~/.cursor-assistant/certs"
+
+api:
+  host: "0.0.0.0"
+  port: 8000
+  cors_origins:
+    - "http://localhost:8080"
+    - "http://127.0.0.1:8080"
+
+database:
+  url: "sqlite+aiosqlite:///./cursor-assistant.db"
+
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
