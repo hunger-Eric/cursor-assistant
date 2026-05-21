@@ -17,13 +17,36 @@ class ProviderService:
     
     async def get_all_providers(self) -> List[Dict[str, Any]]:
         async with AsyncSessionLocal() as session:
-            result = await session.execute(select(Provider).where(Provider.is_active == True))
-            providers = result.scalars().all()
-            return [{
-                "id": p.id, "name": p.name, "type": p.type, "base_url": p.base_url,
-                "api_key": p.api_key, "is_active": p.is_active,
-                "models": [{"id": m.id, "model_id": m.model_id, "name": m.name, "max_tokens": m.max_tokens, "supports_streaming": m.supports_streaming, "is_active": m.is_active} for m in p.models if m.is_active]
-            } for p in providers]
+            result = await session.execute(
+                select(Provider, Model)
+                .outerjoin(Model, Provider.id == Model.provider_id)
+                .where(Provider.is_active == True)
+            )
+            rows = result.all()
+            provider_map: Dict[int, Dict[str, Any]] = {}
+            for provider, model in rows:
+                if provider.id not in provider_map:
+                    provider_map[provider.id] = {
+                        "id": provider.id,
+                        "name": provider.name,
+                        "type": provider.type,
+                        "base_url": provider.base_url,
+                        "api_key": provider.api_key,
+                        "is_active": provider.is_active,
+                        "models": [],
+                    }
+                if model and model.is_active:
+                    provider_map[provider.id]["models"].append(
+                        {
+                            "id": model.id,
+                            "model_id": model.model_id,
+                            "name": model.name,
+                            "max_tokens": model.max_tokens,
+                            "supports_streaming": model.supports_streaming,
+                            "is_active": model.is_active,
+                        }
+                    )
+            return list(provider_map.values())
     
     def get_provider_for_model(self, model_id: str) -> Optional[Dict[str, Any]]:
         if model_id in self._cache:

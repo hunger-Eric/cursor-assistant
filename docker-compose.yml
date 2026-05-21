@@ -1,14 +1,14 @@
-﻿version: '3.8'
+version: '3.8'
 
 services:
   backend:
     build: ./backend
     ports:
       - '8000:8000'
-      - '8080:8080'
+      - '18080:8080'
     volumes:
       - ./data:/root/.cursor-assistant
-      - ./cursor-assistant.db:/app/cursor-assistant.db
+      - ./backend/cursor-assistant.db:/app/cursor-assistant.db
     environment:
       - CMA_DEBUG=false
     restart: unless-stopped
@@ -18,7 +18,7 @@ services:
   frontend:
     build: ./frontend
     ports:
-      - '3000:80'
+      - '13000:80'
     environment:
       - VITE_API_URL=http://localhost:8000
     depends_on:
@@ -30,3 +30,5 @@ services:
 networks:
   app-network:
     driver: bridge
+
+

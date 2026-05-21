@@ -1,7 +1,8 @@
-﻿"""
+"""
 CA Certificate Manager for MITM proxy
 """
 import os
+import logging
 import platform
 import shutil
 from pathlib import Path

@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 class ProxyConfig(BaseSettings):
-    host: str = "127.0.0.1"
+    host: str = "0.0.0.0"
     port: int = 8080
     cert_dir: str = "~/.cursor-assistant/certs"
 
