@@ -1,0 +1,26 @@
+{
+  "providers": [
+    {
+      "name": "sensenova",
+      "type": "deepseek",
+      "api_key": "replace-with-your-key",
+      "base_url": "https://token.sensenova.cn/v1",
+      "models": [
+        {
+          "model_id": "sensenova-6.7-flash-lite",
+          "name": "SenseNova 6.7 Flash Lite",
+          "max_tokens": 256000,
+          "supports_streaming": true,
+          "parameters": {}
+        },
+        {
+          "model_id": "sensenova-u1-fast",
+          "name": "SenseNova U1 Fast",
+          "max_tokens": 256000,
+          "supports_streaming": true,
+          "parameters": {}
+        }
+      ]
+    }
+  ]
+}

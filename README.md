@@ -1,30 +1,56 @@
-﻿# Cursor Assistant
+# Cursor Assistant
 
-MITM Proxy for enabling Chinese domestic AI models (DeepSeek, Qwen, GLM, Kimi) in Cursor IDE - works with **free tier**!
+MITM Proxy for experimenting with domestic AI model integration in Cursor.
 
 ## Features
-- MITM proxy to intercept Cursor API requests
-- Support for Chinese domestic AI models
-- Web management interface
-- Docker deployment support
+
+- MITM proxy for intercepting Cursor network traffic
+- web UI for provider management
+- Docker deployment for backend, frontend, and proxy
+- OpenAI-compatible model routing for BYOK providers
+- native protobuf model-list injection for Cursor `AiService/AvailableModels`
+
+## Local Ports
+
+- backend: `http://localhost:8000`
+- frontend: `http://localhost:13000`
+- proxy: `127.0.0.1:18080`
 
 ## Quick Start
 
-`ash
-# Start services
-docker-compose up -d
+```bash
+docker compose up -d --build
+```
 
-# Access management interface
-open http://localhost:8080
-`
+Then open:
 
-## Usage
+- frontend: `http://localhost:13000`
 
-1. Start the application
-2. Download and install CA certificate
-3. Configure system proxy to localhost:8080
-4. Add your model provider in the web interface
-5. Use Cursor with your preferred Chinese model!
+## Provider Import
+
+Do not commit runtime databases or secrets. Instead:
+
+1. Copy `backend/providers.example.json` to `backend/providers.local.json`
+2. Fill in your real keys locally
+3. Import them with:
+
+```bash
+python backend/scripts/import_providers.py backend/providers.local.json
+```
+
+The local import file is intended to stay untracked.
+
+## Current Status
+
+- protobuf model-list injection is working
+- custom models can be inserted into Cursor's native `AvailableModels` response
+- the free-tier Cursor client still does not expose those injected models as selectable in the UI
+
+See:
+
+- `docs/TECHNICAL_FINDINGS.md`
+- `docs/PR_BODY.md`
 
 ## License
+
 MIT
